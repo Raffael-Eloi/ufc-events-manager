@@ -18,7 +18,7 @@ internal class UfcEventsCoordinatorTest
     {
         _createUfcEventsMock = new Mock<ICreateUfcEvents>();
 
-        _UfcEventsCoordinator = new UfcEventsCoordinator();
+        _UfcEventsCoordinator = new UfcEventsCoordinator(_createUfcEventsMock.Object);
         
         event1 = new UFCEvent()
         {
