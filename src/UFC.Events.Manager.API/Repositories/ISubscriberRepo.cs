@@ -5,4 +5,6 @@ namespace UFC.Events.Manager.API.Repositories;
 public interface ISubscriberRepo
 {
     Task<IEnumerable<Subscriber>> GetAsync();
+
+    Task AddAsync(Subscriber subscriber);
 }

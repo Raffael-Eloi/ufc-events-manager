@@ -40,9 +40,10 @@ For each scenario, in checklist order:
 2. Write **only the test** for that scenario — following the repo's `// Arrange` / `// Act` / `// Assert` structure and Moq-based dependency mocking (see `CreateUfcEventsTest.cs` / `GetUfcEventsTest.cs` for the pattern). Do not write or modify production code in this step. If the usecase doesn't exist yet, the test may fail to compile — that counts as RED.
 3. Run it (`dotnet test --filter "Name=<ScenarioName>"`) and confirm it fails.
 4. Show the user the failing test and stop. Wait for explicit approval before writing any implementation — this is the checkpoint where they confirm the assertions actually capture the intended behavior.
-5. On approval, write the minimal production code to make the test pass (GREEN) — no extra scenarios, no gold-plating beyond this one test.
-6. Run the full test suite (not just the new test) to confirm it passes and nothing else broke.
-7. Mark the task `completed`. If the user wants to commit, follow the repo's paired-commit convention: a RED commit for the failing test, a GREEN commit for the implementation (see `git log` for examples like `GivenEvents_WhenCreating_ThenTheEventsShouldBePersisted (RED)` / `(GREEN)`). Only commit when asked — see repo-wide git safety rules.
-8. Move to the next pending task and repeat from step 1.
+5. On approval, write the minimal production code to make the test pass (GREEN) — no extra scenarios, no gold-plating beyond this one test. If the current test doesn't assert on a case, don't branch, validate, or add extra collaborator calls for it — even if you know a later scenario will need that logic; that logic gets written when its own test forces it.
+6. Before running tests, review the diff line-by-line against the current test's assertions only. Remove anything not required to make this one test pass — including code that correctly anticipates a future scenario from the checklist.
+7. Run the full test suite (not just the new test) to confirm it passes and nothing else broke.
+8. Mark the task `completed`. If the user wants to commit, follow the repo's paired-commit convention: a RED commit for the failing test, a GREEN commit for the implementation (see `git log` for examples like `GivenEvents_WhenCreating_ThenTheEventsShouldBePersisted (RED)` / `(GREEN)`). Only commit when asked — see repo-wide git safety rules.
+9. Move to the next pending task and repeat from step 1.
 
 Stop when the checklist is empty. Don't batch multiple scenarios' tests together, and don't jump to implementation before a RED test has been shown and approved.
