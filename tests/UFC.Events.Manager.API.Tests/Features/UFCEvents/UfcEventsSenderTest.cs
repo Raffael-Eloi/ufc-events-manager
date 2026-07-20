@@ -20,7 +20,7 @@ internal class UfcEventsSenderTest
     {
         _eventSenderRepoMock = new Mock<IEventSenderRepo>();
 
-        _ufcEventsSender = new UfcEventsSender();
+        _ufcEventsSender = new UfcEventsSender(_eventSenderRepoMock.Object);
         
         event1 = new UFCEvent()
         {
@@ -55,7 +55,7 @@ internal class UfcEventsSenderTest
             Email = "johndoe@gmail.com"
         };
         
-        var subscriber2 = new Subscriber
+        subscriber2 = new Subscriber
         {
             Id = 2,
             Email = "jane@gmail.com"
