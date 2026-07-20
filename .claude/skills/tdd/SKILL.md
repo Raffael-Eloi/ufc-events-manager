@@ -18,12 +18,13 @@ Ask the user, in one message:
 2. (If new) What is the **name** of the usecase? Use this exact name for the interface/class/test-class following the repo's convention (e.g. `CreateUfcEvents` → `ICreateUfcEvents`/`CreateUfcEvents` with a single `ExecuteAsync` method, test class `CreateUfcEventsTest`).
 3. What is the **responsibility** of this feature — what should it actually do, and what's in/out of scope?
 4. (If new) Where does it live — which feature folder, e.g. `src/UFC.Events.Manager.API/Features/UFCEvents/<UseCaseName>/`?
+5. What are the **business scenarios** this feature needs to handle? Ask the user to type these out themselves, in plain language (the happy path plus any edge cases/validation/error cases they care about) — don't propose these for them.
 
 Wait for answers before proceeding. If "existing usecase" is chosen, skip questions 2 and 4 and instead locate the existing interactor, interface, and test file yourself.
 
 ## Phase 2 — Scenario naming
 
-Propose a list of test scenario names based on the stated responsibility, using this repo's convention: `GivenX_WhenY_ThenZ` (see existing tests under `tests/UFC.Events.Manager.API.Tests/Features/`). Cover the happy path plus meaningful edge cases/validation/error cases implied by the responsibility — don't invent scenarios unrelated to what was described.
+Translate the business scenarios from question 5 into test scenario names using this repo's convention: `GivenX_WhenY_ThenZ` (see existing tests under `tests/UFC.Events.Manager.API.Tests/Features/`). Each business scenario should map to one test name; don't invent additional scenarios beyond what the user described.
 
 Present the list as a numbered markdown list, nothing else yet — no test code, no implementation. The user will edit/reorder/add/remove names and give feedback. Revise and re-present until they explicitly confirm the list is final. Do not proceed to Phase 3 on an implicit "looks fine" — get an explicit go-ahead.
 
