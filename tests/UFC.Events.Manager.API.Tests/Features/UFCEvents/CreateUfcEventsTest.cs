@@ -6,8 +6,19 @@ using UFC.Events.Manager.API.Repositories;
 
 namespace UFC.Events.Manager.API.Tests.Features.UFCEvents;
 
-internal class CreateUFCEventsTest
+internal class CreateUfcEventsTest
 {
+    private Mock<IUfcEventRepo> _ufcEventRepoMock;
+    private ICreateUfcEvents _createUfcEvents;
+
+    [SetUp]
+    public void Setup()
+    {
+        _ufcEventRepoMock = new Mock<IUfcEventRepo>();
+
+        _createUfcEvents = new CreateUfcEvents(_ufcEventRepoMock.Object);
+    }
+    
     [Test]
     public async Task GivenEvents_WhenCreating_ThenTheEventsShouldBePersisted()
     {
@@ -39,15 +50,11 @@ internal class CreateUFCEventsTest
 
         List<UFCEvent> events = [event1,  event2];
 
-        var ufcEventRepoMock = new Mock<IUFCEventRepo>();
-
-        ICreateUFCEvents createUFCEvents = new CreateUFCEvents(ufcEventRepoMock.Object);
-
         // Act
-        await createUFCEvents.ExecuteAsync(events);
+        await _createUfcEvents.ExecuteAsync(events);
 
         // Assert
-        ufcEventRepoMock
+        _ufcEventRepoMock
             .Verify(repo => repo.CreateAsync(It.Is<IEnumerable<UFCEvent>>(ufcEvents => 
                     ufcEvents.Any(ev => 
                         ev.Name == event1.Name &&
