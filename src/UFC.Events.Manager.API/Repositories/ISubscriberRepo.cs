@@ -6,5 +6,7 @@ public interface ISubscriberRepo
 {
     Task<IEnumerable<Subscriber>> GetAsync();
 
+    Task<bool> ExistsAsync(string email);
+
     Task AddAsync(Subscriber subscriber);
 }
