@@ -118,18 +118,43 @@ internal class UfcEventsCoordinatorTest
     public async Task GivenRequest_WhenThereIsNotNewEvents_ThenTheEventsShouldNotBePersisted()
     {
         // Arrange
-        List<UFCEvent> events = [event1, event2];
+        List<UFCEvent> existingEvents = [event1, event2];
         
         _getUfcEventsMock
             .Setup(useCase => useCase.ExecuteAsync())
-            .ReturnsAsync(events);
+            .ReturnsAsync(existingEvents);
         
         // Act
-        await _ufcEventsCoordinator.ExecuteAsync(events);
+        await _ufcEventsCoordinator.ExecuteAsync(existingEvents);
 
         // Assert
         _createUfcEventsMock
-            .Verify(useCase => useCase.ExecuteAsync(events),
+            .Verify(useCase => useCase.ExecuteAsync(existingEvents),
             Times.Never);
+    }
+    
+    [Test]
+    public async Task GivenRequest_WhenThereIsNoEvents_ThenTheEventsShouldNoBeSentToCalendar()
+    {
+        // Arrange
+        List<UFCEvent> existingEvents = [event1, event2];
+        
+        _getUfcEventsMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync(existingEvents);
+        
+        List<Subscriber> subscribers = [subscriber1, subscriber2];
+        
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync(subscribers);
+        
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(existingEvents);
+
+        // Assert
+        _ufcEventsSenderMock
+            .Verify(useCase => useCase.ExecuteAsync(It.IsAny<List<UFCEvent>>(), It.IsAny<List<Subscriber>>()),
+                Times.Never);
     }
 }

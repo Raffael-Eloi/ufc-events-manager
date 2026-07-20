@@ -29,6 +29,9 @@ public class UfcEventsCoordinator : IUfcEventsCoordinator
     {
         IDictionary<string, UFCEvent> existingEventsByName = await GetExistingEvents();
         List<UFCEvent> newEvents = events.Where(ufcEvent => !existingEventsByName.ContainsKey(ufcEvent.Name)).ToList();
+        if (!newEvents.Any())
+            return;
+        
         await _createUfcEvents.ExecuteAsync(newEvents);
         IEnumerable<Subscriber> subscribers = await _getSubscribers.ExecuteAsync();
         await _ufcEventsSender.ExecuteAsync(newEvents, subscribers);
