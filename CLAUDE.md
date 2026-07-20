@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Rules
+
+Always read and follow `.claude/rules/behavior.md` before responding to any request.
+
 ## Project
 
 UFC Events Manager: a .NET 10 ASP.NET Core Web API (minimal hosting model) for managing UFC events. The codebase is very early-stage — entities, feature interactors, and a repository abstraction exist, but there is no repository implementation and no endpoints are mapped in `Program.cs` yet.

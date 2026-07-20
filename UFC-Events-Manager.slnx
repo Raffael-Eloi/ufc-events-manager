@@ -1,4 +1,5 @@
 <Solution>
+  <Folder Name="/Solution Items/" />
   <Project Path="src/UFC.Events.Manager.API/UFC.Events.Manager.API.csproj" />
   <Project Path="tests/UFC.Events.Manager.API.Tests/UFC.Events.Manager.API.Tests.csproj" Id="95fbba22-8ecb-44e0-b22b-576a1b94d108" />
 </Solution>
