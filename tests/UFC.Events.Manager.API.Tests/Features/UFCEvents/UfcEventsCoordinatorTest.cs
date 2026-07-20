@@ -3,13 +3,15 @@ using UFC.Events.Manager.API.Entities;
 using UFC.Events.Manager.API.Enums;
 using UFC.Events.Manager.API.Features.UFCEvents.CreateEvents;
 using UFC.Events.Manager.API.Features.UFCEvents.EventsCoordinator;
+using UFC.Events.Manager.API.Features.UFCEvents.GetEvents;
 
 namespace UFC.Events.Manager.API.Tests.Features.UFCEvents;
 
 internal class UfcEventsCoordinatorTest
 {
     private Mock<ICreateUfcEvents> _createUfcEventsMock;
-    private IUfcEventsCoordinator _UfcEventsCoordinator;
+    private Mock<IGetUfcEvents> _getUfcEventsMock;
+    private IUfcEventsCoordinator _ufcEventsCoordinator;
     private UFCEvent event1;
     private UFCEvent event2;
 
@@ -17,8 +19,10 @@ internal class UfcEventsCoordinatorTest
     public void Setup()
     {
         _createUfcEventsMock = new Mock<ICreateUfcEvents>();
+        
+        _getUfcEventsMock = new Mock<IGetUfcEvents>();
 
-        _UfcEventsCoordinator = new UfcEventsCoordinator(_createUfcEventsMock.Object);
+        _ufcEventsCoordinator = new UfcEventsCoordinator(_createUfcEventsMock.Object, _getUfcEventsMock.Object);
         
         event1 = new UFCEvent()
         {
@@ -55,11 +59,30 @@ internal class UfcEventsCoordinatorTest
         List<UFCEvent> events = [event1, event2];
         
         // Act
-        await _UfcEventsCoordinator.ExecuteAsync(events);
+        await _ufcEventsCoordinator.ExecuteAsync(events);
 
         // Assert
         _createUfcEventsMock
             .Verify(useCase => useCase.ExecuteAsync(events),
             Times.Once);
+    }
+    
+    [Test]
+    public async Task GivenRequest_WhenThereIsNotNewEvents_ThenTheEventsShouldNotBePersisted()
+    {
+        // Arrange
+        List<UFCEvent> events = [event1, event2];
+        
+        _getUfcEventsMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync(events);
+        
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(events);
+
+        // Assert
+        _createUfcEventsMock
+            .Verify(useCase => useCase.ExecuteAsync(events),
+            Times.Never);
     }
 }
