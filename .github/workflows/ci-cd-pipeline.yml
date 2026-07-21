@@ -40,6 +40,4 @@ jobs:
           dotnet-version: 10.0.x
 
       - name: Run Tests
-        run: |
-          cd tests
-          dotnet test
+        run: dotnet test
