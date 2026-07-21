@@ -26,6 +26,9 @@ public class UFCEvent
 
     public string Title()
     {
-        return $"UFC Fight Night - ${Name}";
+        if (Type == UFCEventType.FightNight)
+            return $"UFC Fight Night - {Name}";
+        
+        return $"UFC {Number} - {Name}";
     }
 }
