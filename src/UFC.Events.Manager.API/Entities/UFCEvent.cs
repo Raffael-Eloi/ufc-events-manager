@@ -23,4 +23,9 @@ public class UFCEvent
     public required DateTime PreliminaryCardStartTime { get; set; }
     
     public required DateTime MainCardStartTime { get; set; }
+
+    public string Title()
+    {
+        return $"UFC Fight Night - ${Name}";
+    }
 }
