@@ -18,12 +18,10 @@ public class UfcEventsSender : IUfcEventsSender
         
         foreach (UFCEvent ufcEvent in events)
         {
-            string description = CreateEventDescription(ufcEvent);
-
             CalendarEvent calendarEvent = new()
             {
                 Title = ufcEvent.Name,
-                Description = description,
+                Description = ufcEvent.Description(),
                 StartTime = ufcEvent.PreliminaryCardStartTime,
                 EndTime = ufcEvent.MainCardStartTime  + TimeSpan.FromHours(3),
                 SendTo = subscriberEmails
@@ -31,10 +29,5 @@ public class UfcEventsSender : IUfcEventsSender
 
             await _eventSenderRepo.CreateCalendarEventAsync(calendarEvent);
         }
-    }
-
-    private static string CreateEventDescription(UFCEvent ufcEvent)
-    {
-        return $"{ufcEvent.Arena}, {ufcEvent.City}, {ufcEvent.Country}. Prelims start at {ufcEvent.PreliminaryCardStartTime:t}, Main Card at {ufcEvent.MainCardStartTime:t}.";
     }
 }

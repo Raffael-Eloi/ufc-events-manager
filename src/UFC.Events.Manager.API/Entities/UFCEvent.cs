@@ -31,4 +31,6 @@ public class UFCEvent
         
         return $"UFC {Number} - {Name}";
     }
+    
+    public string Description() => $"{Arena}, {City}, {Country}. Prelims start at {PreliminaryCardStartTime:t}, Main Card at {MainCardStartTime:t}.";
 }

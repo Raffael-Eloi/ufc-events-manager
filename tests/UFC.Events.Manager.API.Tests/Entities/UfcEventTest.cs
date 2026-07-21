@@ -6,7 +6,7 @@ namespace UFC.Events.Manager.API.Tests.Entities;
 public class UfcEventTest
 {
     [Test]
-    public void GivenName_WhenTypeIsFightNight_ThenTheTitleShouldContainFightNight()
+    public void GivenUfcEvent_WhenTypeIsFightNight_ThenTheTitleShouldContainFightNight()
     {
         // Arrange
         UFCEvent fightNight = new()
@@ -29,7 +29,7 @@ public class UfcEventTest
     }
     
     [Test]
-    public void GivenName_WhenTypeIsNumberedEvent_ThenTheTitleShouldContainNumberedEvent()
+    public void GivenUfcEvent_WhenTypeIsNumberedEvent_ThenTheTitleShouldContainNumberedEvent()
     {
         // Arrange
         UFCEvent numberedEvent = new()
@@ -50,5 +50,31 @@ public class UfcEventTest
 
         // Assert
         Assert.That(title, Is.EqualTo($"UFC {numberedEvent.Number} - {numberedEvent.Name}"));
+    }
+    
+    [Test]
+    public void GivenUfcEvent_WhenHaveInformationFilled_ThenTheDescriptionShouldBe()
+    {
+        // Arrange
+        UFCEvent numberedEvent = new()
+        {
+            Name = "MCGREGOR x HOLLOWAY",
+            Type = UFCEventType.NumberedEvent,
+            Number = 329,
+            Date = new DateOnly(2026, 07, 11),
+            City = "Las Vegas",
+            Arena = "T-Mobile Arena",
+            Country = "United States",
+            PreliminaryCardStartTime = new DateTime(2026, 07, 11, 18, 0, 0, DateTimeKind.Utc),
+            MainCardStartTime = new DateTime(2026, 07, 11, 22, 0, 0, DateTimeKind.Utc)
+        };
+        
+        // Act
+        string description = numberedEvent.Description();
+
+        // Assert
+        string expectedDescription =
+            $"{numberedEvent.Arena}, {numberedEvent.City}, {numberedEvent.Country}. Prelims start at {numberedEvent.PreliminaryCardStartTime:t}, Main Card at {numberedEvent.MainCardStartTime:t}.";
+        Assert.That(description, Is.EqualTo(expectedDescription));
     }
 }

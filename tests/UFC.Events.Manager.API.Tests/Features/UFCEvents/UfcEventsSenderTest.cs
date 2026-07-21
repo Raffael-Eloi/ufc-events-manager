@@ -77,7 +77,7 @@ internal class UfcEventsSenderTest
         _eventSenderRepoMock
             .Verify(repo => repo.CreateCalendarEventAsync(It.Is<CalendarEvent>(calendarEvent => 
                     calendarEvent.Title == event1.Name &&
-                    calendarEvent.Description == $"{event1.Arena}, {event1.City}, {event1.Country}. Prelims start at {event1.PreliminaryCardStartTime:t}, Main Card at {event1.MainCardStartTime:t}." &&
+                    calendarEvent.Description == event1.Description() &&
                     calendarEvent.StartTime == event1.PreliminaryCardStartTime &&
                     calendarEvent.EndTime == event1.MainCardStartTime + TimeSpan.FromHours(3) &&
                     calendarEvent.SendTo.Contains(subscriber1.Email) &&
@@ -87,7 +87,7 @@ internal class UfcEventsSenderTest
         _eventSenderRepoMock
             .Verify(repo => repo.CreateCalendarEventAsync(It.Is<CalendarEvent>(calendarEvent => 
                     calendarEvent.Title == event2.Name &&
-                    calendarEvent.Description == $"{event2.Arena}, {event2.City}, {event2.Country}. Prelims start at {event2.PreliminaryCardStartTime:t}, Main Card at {event2.MainCardStartTime:t}." &&
+                    calendarEvent.Description == event2.Description() &&
                     calendarEvent.StartTime == event2.PreliminaryCardStartTime &&
                     calendarEvent.EndTime == event2.MainCardStartTime + TimeSpan.FromHours(3) &&
                     calendarEvent.SendTo.Contains(subscriber1.Email) &&
