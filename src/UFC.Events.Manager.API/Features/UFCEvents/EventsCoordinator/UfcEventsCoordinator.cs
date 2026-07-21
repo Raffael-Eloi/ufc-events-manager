@@ -32,8 +32,11 @@ public class UfcEventsCoordinator : IUfcEventsCoordinator
         if (!newEvents.Any())
             return;
         
-        await _createUfcEvents.ExecuteAsync(newEvents);
         IEnumerable<Subscriber> subscribers = await _getSubscribers.ExecuteAsync();
+        if (!subscribers.Any())
+            return;
+        
+        await _createUfcEvents.ExecuteAsync(newEvents);
         await _ufcEventsSender.ExecuteAsync(newEvents, subscribers);
     }
 

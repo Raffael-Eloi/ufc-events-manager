@@ -84,6 +84,10 @@ internal class UfcEventsCoordinatorTest
         // Arrange
         List<UFCEvent> events = [event1, event2];
         
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync([subscriber1, subscriber2]);
+        
         // Act
         await _ufcEventsCoordinator.ExecuteAsync(events);
 
@@ -154,7 +158,26 @@ internal class UfcEventsCoordinatorTest
 
         // Assert
         _ufcEventsSenderMock
-            .Verify(useCase => useCase.ExecuteAsync(It.IsAny<List<UFCEvent>>(), It.IsAny<List<Subscriber>>()),
+            .Verify(useCase => useCase.ExecuteAsync(It.IsAny<IEnumerable<UFCEvent>>(), It.IsAny<IEnumerable<Subscriber>>()),
+                Times.Never);
+    }
+    
+    [Test]
+    public async Task GivenRequest_WhenThereIsNoSubscribers_ThenTheEventsShouldNoBeSentToCalendar()
+    {
+        // Arrange
+        List<UFCEvent> events = [event1, event2];
+        
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync([]);
+        
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(events);
+
+        // Assert
+        _ufcEventsSenderMock
+            .Verify(useCase => useCase.ExecuteAsync(It.IsAny<IEnumerable<UFCEvent>>(), It.IsAny<IEnumerable<Subscriber>>()),
                 Times.Never);
     }
 }
