@@ -2,6 +2,7 @@ using UFC.Events.Manager.API.Enums;
 
 namespace UFC.Events.Manager.API.Entities;
 
+// TODO: Change properties from set to init
 public class UFCEvent
 {
     public int? Id { get; set; }
