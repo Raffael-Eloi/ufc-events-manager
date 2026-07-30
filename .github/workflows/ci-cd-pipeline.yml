@@ -23,10 +23,11 @@ jobs:
 
       - uses: actions/cache@v6
        with:
-          path: ~/.nuget/packages
-          key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
-          restore-keys: |
-            nuget-${{ runner.os }}-
+         path: ~/.nuget/packages
+         key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+         restore-keys: |
+           nuget-${{ runner.os }}-
+
       - name: Restore dependencies
         run: dotnet restore
 
