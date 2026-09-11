@@ -5,7 +5,7 @@ using UFC.Events.Manager.API.Entities;
 namespace UFC.Events.Manager.API.Repositories;
 
 // TODO: Add cancellation token
-public class SubscriberRepo : ISubscriberRepo
+public sealed class SubscriberRepo : ISubscriberRepo
 {
     private readonly SubscriberDbContext _dbContext;
 

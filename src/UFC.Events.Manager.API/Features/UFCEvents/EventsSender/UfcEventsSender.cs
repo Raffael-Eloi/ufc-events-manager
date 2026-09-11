@@ -3,7 +3,7 @@ using UFC.Events.Manager.API.Repositories;
 
 namespace UFC.Events.Manager.API.Features.UFCEvents.EventsSender;
 
-public class UfcEventsSender : IUfcEventsSender
+public sealed class UfcEventsSender : IUfcEventsSender
 {
     private readonly IEventSenderRepo _eventSenderRepo;
 

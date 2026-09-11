@@ -1,6 +1,6 @@
 namespace UFC.Events.Manager.API.Entities;
 
-public class Subscriber
+public sealed class Subscriber
 {
     public int? Id { get; init; }
 

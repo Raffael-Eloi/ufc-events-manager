@@ -3,7 +3,7 @@ using UFC.Events.Manager.API.Repositories;
 
 namespace UFC.Events.Manager.API.Features.Emails.GetSubscribers;
 
-public class GetSubscribers : IGetSubscribers
+public sealed class GetSubscribers : IGetSubscribers
 {
     private readonly ISubscriberRepo _subscriberRepo;
 

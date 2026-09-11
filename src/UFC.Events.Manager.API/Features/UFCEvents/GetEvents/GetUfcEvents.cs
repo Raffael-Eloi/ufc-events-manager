@@ -3,7 +3,7 @@ using UFC.Events.Manager.API.Repositories;
 
 namespace UFC.Events.Manager.API.Features.UFCEvents.GetEvents;
 
-public class GetUfcEvents : IGetUfcEvents
+public sealed class GetUfcEvents : IGetUfcEvents
 {
     private readonly IUfcEventRepo _ufcEventRepo;
 

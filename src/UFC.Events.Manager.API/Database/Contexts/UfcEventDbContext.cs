@@ -4,7 +4,7 @@ using UFC.Events.Manager.API.Entities;
 namespace UFC.Events.Manager.API.Database.Contexts;
 
 // TODO: Add audit log later
-public class UfcEventDbContext : DbContext
+public sealed class UfcEventDbContext : DbContext
 {
     public DbSet<UFCEvent> Events { get; set; }
     

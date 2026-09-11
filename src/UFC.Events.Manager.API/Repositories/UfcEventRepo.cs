@@ -4,7 +4,7 @@ using UFC.Events.Manager.API.Entities;
 
 namespace UFC.Events.Manager.API.Repositories;
 
-public class UfcEventRepo : IUfcEventRepo
+public sealed class UfcEventRepo : IUfcEventRepo
 {
     private readonly UfcEventDbContext _dbContext;
 

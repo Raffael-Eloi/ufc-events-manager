@@ -1,6 +1,6 @@
 namespace UFC.Events.Manager.API.Entities;
 
-public class CalendarEvent
+public sealed class CalendarEvent
 {
     public required string Title { get; init; }
     

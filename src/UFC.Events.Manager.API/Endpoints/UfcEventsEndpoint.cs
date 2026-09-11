@@ -4,11 +4,10 @@ using UFC.Events.Manager.API.Features.UFCEvents.EventsCoordinator;
 
 namespace UFC.Events.Manager.API.Endpoints;
 
-// TODO: Add sealed for all the classes that should not be inherited
 // TODO: Inject dependencies
 // TODO: Add logging to application
 // TODO: Provision infrastructure needed
-public class UfcEventsEndpoint
+public sealed class UfcEventsEndpoint
 {
     public static void Map(WebApplication app)
     {

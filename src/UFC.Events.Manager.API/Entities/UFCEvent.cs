@@ -2,7 +2,7 @@ using UFC.Events.Manager.API.Enums;
 
 namespace UFC.Events.Manager.API.Entities;
 
-public class UFCEvent
+public sealed class UFCEvent
 {
     public int? Id { get; init; }
     

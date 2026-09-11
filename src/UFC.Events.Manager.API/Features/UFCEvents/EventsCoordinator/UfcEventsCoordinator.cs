@@ -6,7 +6,7 @@ using UFC.Events.Manager.API.Features.UFCEvents.GetEvents;
 
 namespace UFC.Events.Manager.API.Features.UFCEvents.EventsCoordinator;
 
-public class UfcEventsCoordinator : IUfcEventsCoordinator
+public sealed class UfcEventsCoordinator : IUfcEventsCoordinator
 {
     private readonly ICreateUfcEvents _createUfcEvents;
     private readonly IGetUfcEvents _getUfcEvents;
