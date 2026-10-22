@@ -30,8 +30,6 @@ public sealed class EventSenderRepo : IEventSenderRepo
             Credentials = new NetworkCredential(username, password)
         };
 
-        calendarEvent.SendTo = calendarEvent.SendTo.Any() ? calendarEvent.SendTo : ["email@gmail.com"];
-
         foreach (string email in calendarEvent.SendTo)
         {
             using MailMessage message = new(username, email)
