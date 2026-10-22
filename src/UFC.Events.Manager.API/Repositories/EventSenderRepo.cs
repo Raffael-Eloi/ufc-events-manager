@@ -1,7 +1,3 @@
-//using Google.Apis.Auth.OAuth2;
-//using Google.Apis.Calendar.v3;
-//using Google.Apis.Calendar.v3.Data;
-//using Google.Apis.Services;
 using System.Net;
 using System.Net.Mail;
 using System.Net.Mime;
@@ -12,44 +8,12 @@ namespace UFC.Events.Manager.API.Repositories;
 
 public sealed class EventSenderRepo : IEventSenderRepo
 {
-    //private static readonly string[] Scopes = [CalendarService.Scope.Calendar];
-
     private readonly IConfiguration _configuration;
 
     public EventSenderRepo(IConfiguration configuration)
     {
         _configuration = configuration;
     }
-
-    //public async Task CreateCalendarEventAsync(CalendarEvent calendarEvent)
-    //{
-    //    string serviceAccountJson = _configuration["GoogleCalendar:ServiceAccountKeyJson"];
-    //
-    //    string calendarId = _configuration["GoogleCalendar:CalendarId"] ?? "primary";
-    //
-    //    ServiceAccountCredential specificCredential = CredentialFactory.FromJson<ServiceAccountCredential>(serviceAccountJson);
-    //    GoogleCredential credential = specificCredential.ToGoogleCredential().CreateScoped(Scopes);
-    //
-    //    CalendarService service = new(new BaseClientService.Initializer
-    //    {
-    //        HttpClientInitializer = credential,
-    //        ApplicationName = "UFC Events Manager"
-    //    });
-    //
-    //    Event googleEvent = new()
-    //    {
-    //        Summary = calendarEvent.Title,
-    //        Description = calendarEvent.Description,
-    //        Start = new EventDateTime { DateTimeDateTimeOffset = calendarEvent.StartTime },
-    //        End = new EventDateTime { DateTimeDateTimeOffset = calendarEvent.EndTime },
-    //        //Attendees = calendarEvent.SendTo
-    //        //    .Select(email => new EventAttendee { Email = email })
-    //        //    .ToList()
-    //        Attendees = [new EventAttendee { Email = "email@gmail.com" }]
-    //    };
-    //
-    //    Event test = await service.Events.Insert(googleEvent, calendarId).ExecuteAsync();
-    //}
 
     public async Task CreateCalendarEventAsync(CalendarEvent calendarEvent)
     {
