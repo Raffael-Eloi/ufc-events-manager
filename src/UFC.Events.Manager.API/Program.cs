@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using UFC.Events.Manager.API.Database.Contexts;
 using UFC.Events.Manager.API.Endpoints;
@@ -7,6 +8,7 @@ using UFC.Events.Manager.API.Features.UFCEvents.EventsCoordinator;
 using UFC.Events.Manager.API.Features.UFCEvents.EventsSender;
 using UFC.Events.Manager.API.Features.UFCEvents.GetEvents;
 using UFC.Events.Manager.API.Repositories;
+using UFC.Events.Manager.API.ServiceBus;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
@@ -37,6 +39,17 @@ builder.Services.AddDbContext<SubscriberDbContext>(options =>
         npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
     options.UseSnakeCaseNamingConvention();
 });
+
+builder.Services.AddOptions<ServiceBusOptions>()
+    .BindConfiguration(ServiceBusOptions.SectionName)
+    .ValidateDataAnnotations()
+    .ValidateOnStart();
+
+builder.Services.AddSingleton(_ => new ServiceBusClient(
+    builder.Configuration["ServiceBusConnectionString"]
+    ?? throw new InvalidOperationException("ServiceBusConnectionString is not configured.")));
+
+builder.Services.AddHostedService<UfcEventsListener>();
 
 WebApplication app = builder.Build();
 UfcEventsEndpoint.Map(app);
