@@ -54,12 +54,9 @@ builder.Services.AddHostedService<UfcEventsListener>();
 WebApplication app = builder.Build();
 UfcEventsEndpoint.Map(app);
 
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.MapOpenApi();
+app.UseSwagger();
+app.UseSwaggerUI();
 
 // TODO: Add global middleware exception
 // TODO: Add .editorconfig
