@@ -10,56 +10,92 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read #This is required for actions/checkout
+    build:
+        name: Build
+        runs-on: ubuntu-latest
+        permissions:
+          contents: read #This is required for actions/checkout
 
-    steps:
-      - uses: actions/checkout@v4
+        steps:
+          - name: Checkout code
+            uses: actions/checkout@v6
+          - name: Setup .NET SDK
+            uses: actions/setup-dotnet@v5
+            with:
+              dotnet-version: 10.0.x
 
-      - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '10.x'
+          - name: Cache NuGet packages
+            uses: actions/cache@v6
+            with:
+              path: ~/.nuget/packages
+              key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+              restore-keys: |
+                nuget-${{ runner.os }}-
 
-      - name: Build with dotnet
-        run: dotnet build --configuration Release
+          - name: Restore dependencies
+            run: dotnet restore
 
-      - name: dotnet publish
-        run: dotnet publish src/UFC.Events.Manager.API -c Release -o ${{env.DOTNET_ROOT}}/myapp
+          - name: dotnet publish
+            run: dotnet publish src/UFC.Events.Manager.API -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
-      - name: Upload artifact for deployment job
-        uses: actions/upload-artifact@v4
-        with:
-          name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          - name: Upload artifact for deployment job
+            uses: actions/upload-artifact@v7
+            with:
+              name: .net-app
+              path: ${{env.DOTNET_ROOT}}/myapp
 
-  deploy:
-    runs-on: ubuntu-latest
-    needs: build
-    permissions:
-      id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
+    tests:
+      name: Unit Tests
+      runs-on: ubuntu-latest
+      needs: build
 
-    steps:
-      - name: Download artifact from build job
-        uses: actions/download-artifact@v4
-        with:
-          name: .net-app
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v6
+        - name: Setup .NET SDK
+          uses: actions/setup-dotnet@v5
+          with:
+            dotnet-version: 10.0.x
+
+        - name: Cache NuGet packages
+          uses: actions/cache@v6
+          with:
+            path: ~/.nuget/packages
+            key: nuget-${{ runner.os }}-${{ hashFiles('**/*.csproj') }}
+            restore-keys: |
+              nuget-${{ runner.os }}-
+
+        - name: Restore dependencies
+          run: dotnet restore
+
+        - name: Run Tests
+          run: dotnet test --no-restore
+
+    deploy:
+      runs-on: ubuntu-latest
+      needs: tests
+      permissions:
+        id-token: write #This is required for requesting the JWT
+        contents: read #This is required for actions/checkout
+
+      steps:
+        - name: Download artifact from build job
+          uses: actions/download-artifact@v8
+          with:
+            name: .net-app
       
-      - name: Login to Azure
-        uses: azure/login@v2
-        with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3B8DEF883F884445B74941137ACABC29 }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FDC6368BA8AC4E088B3E4C07BA60903E }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2A22F0460C10458E96E3BAE6B95EFCFF }}
+        - name: Login to Azure
+          uses: azure/login@v3
+          with:
+            client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_3B8DEF883F884445B74941137ACABC29 }}
+            tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_FDC6368BA8AC4E088B3E4C07BA60903E }}
+            subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2A22F0460C10458E96E3BAE6B95EFCFF }}
 
-      - name: Deploy to Azure Web App
-        id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
-        with:
-          app-name: 'ufc-events-manager'
-          slot-name: 'Production'
-          package: .
+        - name: Deploy to Azure Web App
+          id: deploy-to-webapp
+          uses: azure/webapps-deploy@v3
+          with:
+            app-name: 'ufc-events-manager'
+            slot-name: 'Production'
+            package: .
           
