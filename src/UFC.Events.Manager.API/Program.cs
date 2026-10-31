@@ -28,15 +28,15 @@ builder.Services.AddScoped<ISubscriberRepo, SubscriberRepo>();
 
 builder.Services.AddDbContext<UfcEventDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"), 
-        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure());
     options.UseSnakeCaseNamingConvention();
 });
 
 builder.Services.AddDbContext<SubscriberDbContext>(options =>
 {
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Postgres"), 
-        npgsqlOptions => npgsqlOptions.EnableRetryOnFailure());
+    options.UseSqlServer(builder.Configuration.GetConnectionString("SqlServer"),
+        sqlServerOptions => sqlServerOptions.EnableRetryOnFailure());
     options.UseSnakeCaseNamingConvention();
 });
 

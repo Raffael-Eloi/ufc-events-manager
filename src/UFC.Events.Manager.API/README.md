@@ -2,7 +2,7 @@
 
 ## Database migrations
 
-This project uses EF Core with Npgsql (PostgreSQL). Migrations are managed with the `dotnet-ef` CLI tool.
+This project uses EF Core with SQL Server (Azure SQL Database). Migrations are managed with the `dotnet-ef` CLI tool.
 
 ### Prerequisites
 
