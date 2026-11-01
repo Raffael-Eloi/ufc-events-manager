@@ -76,7 +76,7 @@ internal class UfcEventsSenderTest
         // Assert
         _eventSenderRepoMock
             .Verify(repo => repo.CreateCalendarEventAsync(It.Is<CalendarEvent>(calendarEvent => 
-                    calendarEvent.Title == event1.Name &&
+                    calendarEvent.Title == event1.Title() &&
                     calendarEvent.Description == event1.Description() &&
                     calendarEvent.StartTime == event1.PreliminaryCardStartTime &&
                     calendarEvent.EndTime == event1.MainCardStartTime + TimeSpan.FromHours(3) &&
@@ -86,7 +86,7 @@ internal class UfcEventsSenderTest
         
         _eventSenderRepoMock
             .Verify(repo => repo.CreateCalendarEventAsync(It.Is<CalendarEvent>(calendarEvent => 
-                    calendarEvent.Title == event2.Name &&
+                    calendarEvent.Title == event2.Title() &&
                     calendarEvent.Description == event2.Description() &&
                     calendarEvent.StartTime == event2.PreliminaryCardStartTime &&
                     calendarEvent.EndTime == event2.MainCardStartTime + TimeSpan.FromHours(3) &&

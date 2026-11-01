@@ -20,7 +20,7 @@ public sealed class UfcEventsSender : IUfcEventsSender
         {
             CalendarEvent calendarEvent = new()
             {
-                Title = ufcEvent.Name,
+                Title = ufcEvent.Title(),
                 Description = ufcEvent.Description(),
                 StartTime = ufcEvent.PreliminaryCardStartTime,
                 EndTime = ufcEvent.MainCardStartTime  + TimeSpan.FromHours(3),
