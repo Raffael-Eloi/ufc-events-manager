@@ -2,8 +2,8 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using UFC.Events.Manager.API.Database.Contexts;
 
 #nullable disable
@@ -17,36 +17,36 @@ namespace UFC.Events.Manager.API.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "10.0.10")
-                .HasAnnotation("Relational:MaxIdentifierLength", 63);
+                .HasAnnotation("ProductVersion", "10.0.12")
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("UFC.Events.Manager.API.Entities.UFCEvent", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("id");
 
-                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Arena")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("arena");
 
                     b.Property<string>("City")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("city");
 
                     b.Property<string>("Country")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("country");
 
                     b.Property<DateOnly>("Date")
@@ -54,25 +54,25 @@ namespace UFC.Events.Manager.API.Migrations
                         .HasColumnName("date");
 
                     b.Property<DateTime>("MainCardStartTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime2")
                         .HasColumnName("main_card_start_time");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(500)
-                        .HasColumnType("character varying(500)")
+                        .HasColumnType("nvarchar(500)")
                         .HasColumnName("name");
 
                     b.Property<int?>("Number")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("number");
 
                     b.Property<DateTime>("PreliminaryCardStartTime")
-                        .HasColumnType("timestamp with time zone")
+                        .HasColumnType("datetime2")
                         .HasColumnName("preliminary_card_start_time");
 
                     b.Property<int>("Type")
-                        .HasColumnType("integer")
+                        .HasColumnType("int")
                         .HasColumnName("type");
 
                     b.HasKey("Id")
