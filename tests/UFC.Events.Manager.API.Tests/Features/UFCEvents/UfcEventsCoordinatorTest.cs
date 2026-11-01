@@ -18,6 +18,7 @@ internal class UfcEventsCoordinatorTest
     private IUfcEventsCoordinator _ufcEventsCoordinator;
     private UFCEvent event1;
     private UFCEvent event2;
+    private UFCEvent tbdEvent;
     private Subscriber subscriber1;
     private Subscriber subscriber2;
 
@@ -65,6 +66,19 @@ internal class UfcEventsCoordinatorTest
             MainCardStartTime = new DateTime(2026, 07, 18, 21, 0, 0, DateTimeKind.Utc)
         };
         
+        tbdEvent = new UFCEvent()
+        {
+            Id = 3,
+            Name = "TBD vs TBD",
+            Type = UFCEventType.FightNight,
+            Date = new DateOnly(2026, 07, 25),
+            City = "Las Vegas",
+            Arena = "UFC APEX",
+            Country = "United States",
+            PreliminaryCardStartTime = new DateTime(2026, 07, 25, 18, 0, 0, DateTimeKind.Utc),
+            MainCardStartTime = new DateTime(2026, 07, 25, 21, 0, 0, DateTimeKind.Utc)
+        };
+
         subscriber1 = new Subscriber
         {
             Id = 1,
@@ -179,5 +193,83 @@ internal class UfcEventsCoordinatorTest
         _ufcEventsSenderMock
             .Verify(useCase => useCase.ExecuteAsync(It.IsAny<IEnumerable<UFCEvent>>(), It.IsAny<IEnumerable<Subscriber>>()),
                 Times.Never);
+    }
+
+    [Test]
+    public async Task GivenRequest_WhenAllEventsAreTbd_ThenTheEventsShouldNotBePersisted()
+    {
+        // Arrange
+        List<UFCEvent> events = [tbdEvent];
+
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync([subscriber1, subscriber2]);
+
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(events);
+
+        // Assert
+        _createUfcEventsMock
+            .Verify(useCase => useCase.ExecuteAsync(It.IsAny<IEnumerable<UFCEvent>>()),
+                Times.Never);
+    }
+
+    [Test]
+    public async Task GivenRequest_WhenAllEventsAreTbd_ThenTheEventsShouldNotBeSentToCalendar()
+    {
+        // Arrange
+        List<UFCEvent> events = [tbdEvent];
+
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync([subscriber1, subscriber2]);
+
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(events);
+
+        // Assert
+        _ufcEventsSenderMock
+            .Verify(useCase => useCase.ExecuteAsync(It.IsAny<IEnumerable<UFCEvent>>(), It.IsAny<IEnumerable<Subscriber>>()),
+                Times.Never);
+    }
+
+    [Test]
+    public async Task GivenRequest_WhenThereAreTbdAndDefinedEvents_ThenOnlyTheDefinedEventsShouldBePersisted()
+    {
+        // Arrange
+        List<UFCEvent> events = [event1, tbdEvent];
+
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync([subscriber1, subscriber2]);
+
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(events);
+
+        // Assert
+        _createUfcEventsMock
+            .Verify(useCase => useCase.ExecuteAsync(It.Is<IEnumerable<UFCEvent>>(x => x.SequenceEqual(new[] { event1 }))),
+                Times.Once);
+    }
+
+    [Test]
+    public async Task GivenRequest_WhenThereAreTbdAndDefinedEvents_ThenOnlyTheDefinedEventsShouldBeSentToCalendar()
+    {
+        // Arrange
+        List<UFCEvent> events = [event1, tbdEvent];
+
+        List<Subscriber> subscribers = [subscriber1, subscriber2];
+
+        _getSubscribersMock
+            .Setup(useCase => useCase.ExecuteAsync())
+            .ReturnsAsync(subscribers);
+
+        // Act
+        await _ufcEventsCoordinator.ExecuteAsync(events);
+
+        // Assert
+        _ufcEventsSenderMock
+            .Verify(useCase => useCase.ExecuteAsync(It.Is<IEnumerable<UFCEvent>>(x => x.SequenceEqual(new[] { event1 })), subscribers),
+                Times.Once);
     }
 }

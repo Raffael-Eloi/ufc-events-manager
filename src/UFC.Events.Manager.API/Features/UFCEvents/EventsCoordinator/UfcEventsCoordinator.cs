@@ -27,8 +27,12 @@ public sealed class UfcEventsCoordinator : IUfcEventsCoordinator
     
     public async Task ExecuteAsync(IEnumerable<UFCEvent> events)
     {
+        IEnumerable<UFCEvent> eventsDefined = events.Where(x => x.Name != "TBD vs TBD");
+        if (!eventsDefined.Any())
+            return;
+
         IDictionary<string, UFCEvent> existingEventsByName = await GetExistingEvents();
-        List<UFCEvent> newEvents = events.Where(ufcEvent => !existingEventsByName.ContainsKey(ufcEvent.Name)).ToList();
+        List<UFCEvent> newEvents = eventsDefined.Where(ufcEvent => !existingEventsByName.ContainsKey(ufcEvent.Name)).ToList();
         if (!newEvents.Any())
             return;
         
