@@ -53,9 +53,25 @@ builder.Services.AddSingleton(_ => new ServiceBusClient(
 
 builder.Services.AddHostedService<UfcEventsListener>();
 
+string allowedWebClient = "AllowedWebClient";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        name: allowedWebClient,
+        policy =>
+        {
+            policy
+            .WithOrigins(builder.Configuration["AllowedWebClient"]!)
+            .AllowAnyHeader()
+            .WithMethods("POST");
+        });
+});
+
 WebApplication app = builder.Build();
 UfcEventsEndpoint.Map(app);
 SubscribersEndpoint.Map(app);
+
+app.UseCors(allowedWebClient);
 
 app.MapOpenApi();
 app.UseSwagger();
