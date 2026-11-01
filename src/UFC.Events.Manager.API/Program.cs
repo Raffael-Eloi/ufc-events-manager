@@ -2,6 +2,7 @@ using Azure.Messaging.ServiceBus;
 using Microsoft.EntityFrameworkCore;
 using UFC.Events.Manager.API.Database.Contexts;
 using UFC.Events.Manager.API.Endpoints;
+using UFC.Events.Manager.API.Features.Emails.AddSubscribers;
 using UFC.Events.Manager.API.Features.Emails.GetSubscribers;
 using UFC.Events.Manager.API.Features.UFCEvents.CreateEvents;
 using UFC.Events.Manager.API.Features.UFCEvents.EventsCoordinator;
@@ -20,6 +21,7 @@ builder.Services.AddScoped<IUfcEventsCoordinator, UfcEventsCoordinator>();
 builder.Services.AddScoped<ICreateUfcEvents, CreateUfcEvents>();
 builder.Services.AddScoped<IGetUfcEvents, GetUfcEvents>();
 builder.Services.AddScoped<IGetSubscribers, GetSubscribers>();
+builder.Services.AddScoped<IAddSubscribers, AddSubscribers>();
 builder.Services.AddScoped<IUfcEventsSender, UfcEventsSender>();
 
 builder.Services.AddScoped<IEventSenderRepo, EventSenderRepo>();
@@ -53,6 +55,7 @@ builder.Services.AddHostedService<UfcEventsListener>();
 
 WebApplication app = builder.Build();
 UfcEventsEndpoint.Map(app);
+SubscribersEndpoint.Map(app);
 
 app.MapOpenApi();
 app.UseSwagger();
