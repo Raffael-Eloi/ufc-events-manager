@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using UFC.Events.Manager.API.Entities;
 using UFC.Events.Manager.API.Features.Emails.AddSubscribers;
+using UFC.Events.Manager.API.Features.Emails.GetSubscribers;
 using UFC.Events.Manager.API.Features.UFCEvents.EventsSender;
 using UFC.Events.Manager.API.Features.UFCEvents.GetEvents;
 
@@ -12,10 +13,14 @@ public sealed class SubscribersEndpoint
     {
         app.MapPost("/api/v1.0/subscribers", async (
             [FromServices] IAddSubscribers addSubscribers,
+            [FromServices] IGetSubscribers getSubscribers,
             [FromServices] IGetUfcEvents getUfcEvents,
             [FromServices] IUfcEventsSender ufcEventsSender,
             [FromBody] AddSubscriberRequest request) =>
         {
+            if (await getSubscribers.ExistsAsync(request.Email))
+                return Results.Ok();
+
             await addSubscribers.ExecuteAsync(request.Email);
 
             IEnumerable<UFCEvent> existingEvents = await getUfcEvents.ExecuteAsync();

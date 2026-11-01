@@ -16,4 +16,9 @@ public sealed class GetSubscribers : IGetSubscribers
     {
         return await _subscriberRepo.GetAsync();
     }
+
+    public async Task<bool> ExistsAsync(string email) 
+    {
+        return await _subscriberRepo.ExistsAsync(email);
+    }
 }
