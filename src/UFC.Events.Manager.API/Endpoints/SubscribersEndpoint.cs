@@ -35,7 +35,7 @@ public sealed class SubscribersEndpoint
             if (existingEvents.Any())
             {
                 Subscriber subscriber = new(){ Email = request.Email }    ;
-                await ufcEventsSender.ExecuteAsync(existingEvents, [subscriber]);
+                ufcEventsSender.ExecuteAsync(existingEvents, [subscriber]);
             }
 
             return Results.Ok();

@@ -16,18 +16,15 @@ public sealed class UfcEventsSender : IUfcEventsSender
     {
         List<string> subscriberEmails = subscribers.Select(s => s.Email).ToList();
         
-        foreach (UFCEvent ufcEvent in events)
+        IEnumerable<Task> sends = events.Select(ufcEvent => _eventSenderRepo.CreateCalendarEventAsync(new CalendarEvent
         {
-            CalendarEvent calendarEvent = new()
-            {
-                Title = ufcEvent.Title(),
-                Description = ufcEvent.Description(),
-                StartTime = ufcEvent.PreliminaryCardStartTime,
-                EndTime = ufcEvent.MainCardStartTime  + TimeSpan.FromHours(3),
-                SendTo = subscriberEmails
-            };
+            Title = ufcEvent.Title(),
+            Description = ufcEvent.Description(),
+            StartTime = ufcEvent.PreliminaryCardStartTime,
+            EndTime = ufcEvent.MainCardStartTime + TimeSpan.FromHours(3),
+            SendTo = subscriberEmails
+        }));
 
-            await _eventSenderRepo.CreateCalendarEventAsync(calendarEvent);
-        }
+        await Task.WhenAll(sends);
     }
 }
