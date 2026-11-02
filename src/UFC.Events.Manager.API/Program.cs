@@ -63,7 +63,7 @@ builder.Services.AddCors(options =>
         policy =>
         {
             policy
-            .WithOrigins(builder.Configuration["AllowedWebClient"]!)
+            .WithOrigins(builder.Configuration.GetSection("AllowedWebClient").Get<string[]>()!)
             .AllowAnyHeader()
             .WithMethods("POST");
         });
